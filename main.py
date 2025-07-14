@@ -1,12 +1,8 @@
 import praw
-import openai
 import os
 import sys
 
-# Replace with your OpenAI API key
-openai.api_key = "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"
-
-# Replace with your Reddit API credentials
+# ✅ Your Reddit API credentials
 reddit = praw.Reddit(
     client_id="GXJhpA0-iLr2YEOmxY7OSg",
     client_secret="bLCqop5UhpGM1xubZanvNJ2lHkfQ_g",
@@ -30,30 +26,28 @@ def fetch_user_data(username):
     return posts, comments
 
 def generate_persona(posts, comments):
-    prompt = f"""
-You are an AI assistant tasked with creating a detailed user persona based on the following Reddit posts and comments.
-Highlight key traits such as interests, tone, personality, possible profession, values, and political leaning.
+    text = " ".join(posts + comments).lower()
+    persona = []
 
-Make sure to cite one post or comment under each trait.
+    if any(word in text for word in ["python", "code", "developer", "programming"]):
+        persona.append("💻 Interest: Programming")
 
---- START DATA ---
-POSTS:
-{''.join(posts)}
+    if any(word in text for word in ["ai", "chatgpt", "machine learning", "model"]):
+        persona.append("🤖 Interest: Artificial Intelligence")
 
-COMMENTS:
-{''.join(comments)}
---- END DATA ---
+    if any(word in text for word in ["game", "steam", "xbox", "playstation", "fps"]):
+        persona.append("🎮 Interest: Gaming")
 
-Now create the user persona:
-"""
+    if any(word in text for word in ["help", "thanks", "appreciate", "kind"]):
+        persona.append("🧠 Personality: Helpful and polite")
 
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.7,
-        max_tokens=800
-    )
-    return response["choices"][0]["message"]["content"]
+    if any(word in text for word in ["funny", "lol", "haha"]):
+        persona.append("😄 Personality: Humorous")
+
+    if not persona:
+        persona.append("🧐 Not enough data to create a detailed persona.")
+
+    return "\n".join(persona)
 
 def save_persona(username, persona_text):
     output_path = f"personas/{username}.txt"
