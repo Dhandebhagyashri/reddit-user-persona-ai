@@ -4,13 +4,13 @@ import os
 import sys
 
 # Replace with your OpenAI API key
-openai.api_key = "YOUR_OPENAI_API_KEY"
+openai.api_key = "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"
 
 # Replace with your Reddit API credentials
 reddit = praw.Reddit(
-    client_id="YOUR_REDDIT_CLIENT_ID",
-    client_secret="YOUR_REDDIT_CLIENT_SECRET",
-    user_agent="reddit-user-persona-script"
+    client_id="GXJhpA0-iLr2YEOmxY7OSg",
+    client_secret="bLCqop5UhpGM1xubZanvNJ2lHkfQ_g",
+    user_agent="PersonaScript123"
 )
 
 def extract_username(url):
@@ -48,7 +48,7 @@ Now create the user persona:
 """
 
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7,
         max_tokens=800
